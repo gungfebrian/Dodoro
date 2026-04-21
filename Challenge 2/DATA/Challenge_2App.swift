@@ -11,12 +11,12 @@ import SwiftUI
 struct Challenge_2App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SpinWheelView()
         }
     }
 }
 
 
 #Preview {
-    ContentView()
+    SpinWheelView()
 }
