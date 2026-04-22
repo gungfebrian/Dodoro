@@ -11,7 +11,9 @@ import SwiftUI
 struct Challenge_2App: App {
     var body: some Scene {
         WindowGroup {
-            SpinWheelView()
+            NavigationStack {
+                SpinWheelView()
+            }
         }
     }
 }

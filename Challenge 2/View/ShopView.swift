@@ -41,8 +41,8 @@ struct ShopView: View {
                 HStack {
                     ZStack{
                         RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.lightGray)
-                            .strokeBorder(Color.darkGray, lineWidth: 5)
+                            .fill(Color.lightGrayy)
+                            .strokeBorder(Color.darkGrayy, lineWidth: 5)
                             .frame(width: 170, height: 170)
                         
                         VStack {
@@ -58,8 +58,8 @@ struct ShopView: View {
                     
                     ZStack{
                         RoundedRectangle(cornerRadius: 30)
-                            .fill(Color.lightGray)
-                            .strokeBorder(Color.darkGray, lineWidth: 5)
+                            .fill(Color.lightGrayy)
+                            .strokeBorder(Color.darkGrayy, lineWidth: 5)
                             .frame(width: 170, height: 170)
                         
                         VStack {
