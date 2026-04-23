@@ -1,15 +1,23 @@
+//
+//  BreakWheelView.swift
+//  Challenge 2
+//
+//  Created by Alan Brian Frederick on 22/04/26.
+//
+
 import SwiftUI
 
-struct SpinWheelView: View {
-    static let segments: [Int] = [5, 6, 7, 8, 9, 10, 12, 15]
+struct BreakWheelView: View {
+    static let segments: [Int] = [0]
     let segmentAngle: Double = 360.0 / Double(Self.segments.count)
     
     @State private var rotation: Double = 0
     @State private var isSpinning: Bool = false
     @State private var result: Int? = nil
     
-    @State private var isAnimasiOn: Bool = false  //  transition
-    @State private var showTimer: Bool = false //
+    @State var isAnimasiOn: Bool = false  //  transition
+    @State private var showTimer: Bool = false
+    @State var isDone: Bool = false //
     
     var body: some View {
         ZStack {
@@ -19,18 +27,18 @@ struct SpinWheelView: View {
                 .ignoresSafeArea()
     
             VStack {
-                Text("Spin your")
+                Text("let's have a")
                     .font(.title2)
                     .fontWeight(.medium)
                 
-                Text("Pomodoro\nTimer")
+                Text("Break\nTime")
                     .font(.system(size: 64))
                     .fontWeight(.bold)
                     .fontDesign(.rounded)
                     .multilineTextAlignment(.center)
                     
                 
-                Text("Spin the wheel to set your\nfocus session.")
+                Text("Spin the wheel to set your\nbreak time.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -44,7 +52,7 @@ struct SpinWheelView: View {
             VStack{
                 
                 ZStack {
-                    Image("SPINNNN")
+                    Image("breakWheel")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 600, height: 600)
@@ -77,7 +85,7 @@ struct SpinWheelView: View {
             
             //ini fade header
             if showTimer, let minutes = result {
-                TimerView(totalMinutes: minutes, isPresented: $showTimer)
+                BreakTimerView(totalMinutes: minutes, isPresented: $showTimer)
                     .transition(.opacity)
             }
         }
@@ -93,6 +101,18 @@ struct SpinWheelView: View {
                 }
             }
         }
+        
+        .onChange(of: isDone) { oldValue, newValue in
+            if !newValue {
+                withAnimation(.easeInOut(duration: 0.7)) {
+                    isAnimasiOn = false
+                    result = nil
+                    rotation = 0
+                    
+                }
+            }
+        }
+
     }
     
     func spinWheel() {
@@ -137,7 +157,5 @@ struct SpinWheelView: View {
 }
 
 #Preview {
-    SpinWheelView()
+    BreakWheelView()
 }
-
-//alan anying
