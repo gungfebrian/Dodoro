@@ -1,24 +1,13 @@
-//
-//  Challenge_2App.swift
-//  Challenge 2
-//
-//  Created by Gung  on 17/04/26.
-//
-
 import SwiftUI
 
 @main
 struct Challenge_2App: App {
+    @StateObject private var vm = AppViewModel()
+
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                SpinWheelView()
-            }
+            ContentView()
+                .environmentObject(vm)
         }
     }
-}
-
-
-#Preview {
-    SpinWheelView()
 }

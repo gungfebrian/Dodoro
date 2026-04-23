@@ -1,71 +1,54 @@
-//
-//  BreakTimerView.swift
-//  Challenge 2
-//
-//  Created by Alan Brian Frederick on 22/04/26.
-//
-
 import SwiftUI
 
 struct BreakTimerView: View {
-
     let totalMinutes: Int
-    @Binding var isPresented: Bool // binding
+    @EnvironmentObject var vm: AppViewModel
 
     @State private var timeRemaining: Int
     @State private var isHolding = false
     @State private var holdProgress: Double = 0
-    @State private var isTimerRunning = false
 
-  //init binding dari @enviroment balik
-    init(totalMinutes: Int, isPresented: Binding<Bool>) {
+    init(totalMinutes: Int) {
         self.totalMinutes = totalMinutes
-        self._isPresented = isPresented
         self._timeRemaining = State(initialValue: totalMinutes * 60)
-        // contoh 7*60 = 370 = 7 menit
     }
 
     var formattedTime: String {
         String(format: "%02d:%02d", timeRemaining / 60, timeRemaining % 60)
-    } //420/60 = 7, modulo untuk detik
+    }
+
     var body: some View {
         ZStack {
             Image("titikkertas")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
-            
+
             VStack {
-                if timeRemaining > 0 {
-                    Text(formattedTime)
-                        .font(.system(size: 72))
-                        .fontWeight(.heavy)
-                        .fontDesign(.rounded)
-                        .foregroundColor(Color(white: 0.12))
-                } else {
-                    SpinWheelView()
-                }
-                
-            }       .offset(y: -40) //spacer gati ini supaya sama kaya main
-            
+                Text(formattedTime)
+                    .font(.system(size: 72))
+                    .fontWeight(.heavy)
+                    .fontDesign(.rounded)
+                    .foregroundColor(Color(white: 0.12))
+            }
+            .offset(y: -40)
+
             VStack {
-                Spacer() //vstack spacer manual dorong
-                
+                Spacer()
+
                 VStack(spacing: 12) {
-                    
-                    
                     Text("Hold to exit")
                         .font(.system(size: 16))
                         .fontWeight(.regular)
                         .fontDesign(.rounded)
                         .foregroundColor(.gray.opacity(0.6))
-                    
+
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 2)
                             .fill(Color.gray.opacity(0.2))
                             .frame(width: 120, height: 3)
                             .opacity(isHolding ? 1 : 0)
-                        
+
                         if isHolding {
                             RoundedRectangle(cornerRadius: 2)
                                 .fill(Color(white: 0.18))
@@ -77,10 +60,7 @@ struct BreakTimerView: View {
                 .padding(.bottom, 60)
             }
         }
-        
-        
         .onAppear { startCountdown() }
-        
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
@@ -90,7 +70,7 @@ struct BreakTimerView: View {
                     withAnimation(.linear(duration: 1.5)) { holdProgress = 1.0 }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                         guard isHolding else { return }
-                        isPresented = false // 3. Changed dismiss() to isPresented = false
+                        vm.resetToSpin()
                     }
                 }
                 .onEnded { _ in
@@ -98,9 +78,7 @@ struct BreakTimerView: View {
                     holdProgress = 0
                 }
         )
-        
     }
-        
 
     private func startCountdown() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
@@ -108,13 +86,13 @@ struct BreakTimerView: View {
                 timeRemaining -= 1
             } else {
                 t.invalidate()
-
+                vm.resetToSpin()
             }
         }
     }
 }
 
 #Preview {
-    //hardcode untuk test
-    BreakTimerView(totalMinutes: 0, isPresented: .constant(true))
+    BreakTimerView(totalMinutes: 1)
+        .environmentObject(AppViewModel())
 }

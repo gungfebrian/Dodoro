@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct SpinWheelView: View {
-    private let segments = WheelData.focusSegments
+struct BreakWheelView: View {
+    private let segments = WheelData.breakSegments
     private var segmentAngle: Double { WheelData.segmentAngle(for: segments) }
 
     @EnvironmentObject var vm: AppViewModel
@@ -18,22 +18,21 @@ struct SpinWheelView: View {
                 .ignoresSafeArea()
 
             // Header
-            VStack(spacing: 6) {
-                Text("Spin your")
-                    .font(.system(size: 20, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color(white: 0.35))
+            VStack {
+                Text("let's have a")
+                    .font(.title2)
+                    .fontWeight(.medium)
 
-                Text("Pomodoro\nTimer")
-                    .font(.system(size: 60, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color(white: 0.10))
+                Text("Break\nTime")
+                    .font(.system(size: 64))
+                    .fontWeight(.bold)
+                    .fontDesign(.rounded)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(-2)
 
-                Text("Spin the wheel to set your\nfocus session.")
-                    .font(.system(size: 14, weight: .regular, design: .rounded))
-                    .foregroundStyle(Color(white: 0.50))
+                Text("Spin the wheel to set your\nbreak time.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                    .padding(.top, 4)
             }
             .padding()
             .offset(y: isAnimasiOn ? -500 : -220)
@@ -42,7 +41,7 @@ struct SpinWheelView: View {
             // Wheel
             VStack {
                 ZStack {
-                    Image("SPIN2")
+                    Image("breakWheel")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 600, height: 600)
@@ -69,37 +68,20 @@ struct SpinWheelView: View {
                     .opacity(isSpinning ? 0 : 1)
             }
 
-            // Top bar: shop + mode toggle + coins
+            // Coin badge (top-right)
             VStack {
                 HStack {
-                    shopButton
                     Spacer()
-                    if vm.hasSpunOnce {
-                        modeToggle
-                        Spacer()
-                    }
                     coinBadge
+                        .padding(.trailing, 24)
+                        .padding(.top, 60)
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 60)
                 Spacer()
             }
         }
     }
 
     // MARK: - Subviews
-
-    private var shopButton: some View {
-        Button {
-            vm.phase = .shop
-        } label: {
-            Image(systemName: "cart.fill")
-                .font(.system(size: 18))
-                .foregroundStyle(Color(white: 0.12))
-                .padding(10)
-                .background(.ultraThinMaterial, in: Circle())
-        }
-    }
 
     private var coinBadge: some View {
         HStack(spacing: 4) {
@@ -113,27 +95,6 @@ struct SpinWheelView: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
         .background(.ultraThinMaterial, in: Capsule())
-    }
-
-    private var modeToggle: some View {
-        Button {
-            vm.preferManualPick = true
-        } label: {
-            HStack(spacing: 6) {
-                Image(systemName: "clock")
-                    .font(.system(size: 14, weight: .medium))
-                Text("Pick")
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-            }
-            .foregroundStyle(Color(white: 0.30))
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
-            .background(
-                Capsule()
-                    .fill(Color.white.opacity(0.5))
-                    .strokeBorder(Color(white: 0.80), lineWidth: 1)
-            )
-        }
     }
 
     // MARK: - Spin Logic
@@ -157,8 +118,6 @@ struct SpinWheelView: View {
             isSpinning = false
             rotation = rotation.truncatingRemainder(dividingBy: 360)
 
-            if !vm.hasSpunOnce { vm.markFirstSpin() }
-
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 startTransitionSequence()
             }
@@ -172,14 +131,14 @@ struct SpinWheelView: View {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             if let minutes = result {
-                vm.focusDuration = minutes
-                vm.startFocus()
+                vm.breakDuration = minutes
+                vm.startBreak()
             }
         }
     }
 }
 
 #Preview {
-    SpinWheelView()
-        .environmentObject(AppViewModel.preview(coins: 12))
+    BreakWheelView()
+        .environmentObject(AppViewModel())
 }
