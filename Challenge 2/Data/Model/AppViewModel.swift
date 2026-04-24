@@ -72,7 +72,7 @@ class AppViewModel: ObservableObject {
         ownedItems.contains(item.id)
     }
 
-    // MARK: - Persistence
+    // MARK: Persistence
 
     func markFirstSpin() {
         hasSpunOnce = true
@@ -85,7 +85,7 @@ class AppViewModel: ObservableObject {
         defaults.set(Array(ownedItems), forKey: "ownedItems")
     }
 
-    // MARK: - Preview Helper
+    // MARK: Preview Helper
 
     static func preview(coins: Int = 20, owned: [String] = [], hasSpunOnce: Bool = true) -> AppViewModel {
         let vm = AppViewModel()

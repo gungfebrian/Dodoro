@@ -60,7 +60,7 @@ struct BreakWheelView: View {
     private var wheel: some View {
         VStack {
             ZStack {
-                Image("breakWheel")
+                Image("Break")
                     .resizable()
                     .scaledToFit()
                     .frame(width: Layout.wheelSize, height: Layout.wheelSize)

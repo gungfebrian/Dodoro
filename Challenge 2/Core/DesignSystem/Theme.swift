@@ -1,7 +1,6 @@
 import SwiftUI
 
-// MARK: - App Colors
-
+//MARK: theme color
 enum AppColor {
     static let ink      = Color(red: 0.14, green: 0.12, blue: 0.10)
     static let inkSoft  = Color(red: 0.34, green: 0.30, blue: 0.26)
@@ -10,8 +9,7 @@ enum AppColor {
     static let paperLo  = Color(red: 0.92, green: 0.88, blue: 0.80)
 }
 
-// MARK: - Layout Constants
-
+//MARK: Layout
 enum Layout {
     static let screenPadding: CGFloat = 24
     static let topBarPadding: CGFloat = 60
@@ -27,8 +25,7 @@ enum Layout {
     static let holdBarHeight: CGFloat = 3
 }
 
-// MARK: - Animation Timings
-
+//MARK: Animation Time
 enum Timing {
     static let spinDuration: Double = 4.0
     static let postSpinDelay: Double = 1.0

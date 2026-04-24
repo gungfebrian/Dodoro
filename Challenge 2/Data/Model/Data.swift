@@ -20,3 +20,5 @@ struct ShopItem: Identifiable, Equatable {
         ShopItem(id: "scribi", name: "Scribi", price: 25, imageName: "Scribi"),
     ]
 }
+
+//MARK: Data shop, segment, ETC

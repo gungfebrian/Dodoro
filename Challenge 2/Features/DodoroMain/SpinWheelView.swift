@@ -22,6 +22,9 @@ struct SpinWheelView: View {
             VStack {
                 HStack {
                     ShopButton()
+                    
+                    
+                    
                     Spacer()
                     if vm.hasSpunOnce && !isSpinning && result == nil {
                         modeToggle
@@ -45,7 +48,7 @@ struct SpinWheelView: View {
                 .font(AppFont.subtitle)
                 .foregroundStyle(AppColor.inkSoft)
 
-            Text("Pomodoro\nTimer")
+            Text("Dodoro\nTimer")
                 .font(AppFont.heroTitle)
                 .foregroundStyle(AppColor.ink)
                 .multilineTextAlignment(.center)
@@ -95,6 +98,7 @@ struct SpinWheelView: View {
     private var modeToggle: some View {
         Button {
             vm.preferManualPick = true
+            Menggetar.instance.Getar(style: .heavy)
         } label: {
             HStack(spacing: 6) {
                 Image(systemName: "clock")
@@ -110,7 +114,7 @@ struct SpinWheelView: View {
                     .fill(Color.white.opacity(0.5))
                     .strokeBorder(AppColor.paperLo, lineWidth: 1)
             )
-        }
+        } .offset(x: -125,y: -55)
     }
 
     // MARK: - Logic

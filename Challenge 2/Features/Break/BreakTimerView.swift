@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct TimerView: View {
+struct BreakTimerView: View {
     let totalMinutes: Int
     @EnvironmentObject var vm: AppViewModel
 
@@ -23,32 +23,13 @@ struct TimerView: View {
             VStack {
                 Spacer()
                 HoldToExitBar(isHolding: $isHolding, holdProgress: $holdProgress, onExit: exit)
-                    .padding(.bottom, 40)
-            }
-
-            VStack {
-                HStack {
-                    Spacer()
-                    CoinBadge()
-                        .padding(.trailing, Layout.screenPadding)
-                        .padding(.top, Layout.topBarPadding)
-                }
-                Spacer()
+                    .padding(.bottom, 60)
             }
         }
         .onAppear { startCountdown() }
         .onDisappear { stopTimer() }
         .gesture(HoldToExitBar.gesture(isHolding: $isHolding, holdProgress: $holdProgress, onExit: exit))
-        .onChange(of: isHolding) {oldValue,
-            newValue in
-            if newValue {
-                Menggetar.instance.Getar(style: .medium)
-            }
-        }
-    
     }
-    
-    
 
     // MARK: - Actions
 
@@ -60,14 +41,11 @@ struct TimerView: View {
     private func startCountdown() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
             if timeRemaining > 0 {
-                timeRemaining -= 1
+                timeRemaining -= 60
             } else {
                 t.invalidate()
                 timer = nil
-                vm.earnCoins(for: totalMinutes)
-                DispatchQueue.main.asyncAfter(deadline: .now() + Timing.phaseChangeDelay) {
-                    vm.phase = .breakSpinning
-                }
+                vm.resetToSpin()
             }
         }
     }
@@ -79,9 +57,6 @@ struct TimerView: View {
 }
 
 #Preview {
-    TimerView(totalMinutes: 1)
-        .environmentObject(AppViewModel.preview(coins: 8))
+    BreakTimerView(totalMinutes: 1)
+        .environmentObject(AppViewModel.preview(coins: 15))
 }
-
-
-
