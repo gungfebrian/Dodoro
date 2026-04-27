@@ -5,9 +5,11 @@ struct TimerView: View {
     @EnvironmentObject var vm: AppViewModel
 
     @State private var timeRemaining: Int
-    @State private var timer: Timer?
+    @State private var isRunning = true
     @State private var isHolding = false
     @State private var holdProgress: Double = 0
+
+    private let countdown = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     init(totalMinutes: Int) {
         self.totalMinutes = totalMinutes
@@ -36,45 +38,31 @@ struct TimerView: View {
                 Spacer()
             }
         }
-        .onAppear { startCountdown() }
-        .onDisappear { stopTimer() }
-        .gesture(HoldToExitBar.gesture(isHolding: $isHolding, holdProgress: $holdProgress, onExit: exit))
-        .onChange(of: isHolding) {oldValue,
-            newValue in
-            if newValue {
-                Menggetar.instance.Getar(style: .medium)
-            }
-        }
-    
-    }
-    
-    
-
-    // MARK: - Actions
-
-    private func exit() {
-        stopTimer()
-        vm.resetToSpin()
-    }
-
-    private func startCountdown() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
+        .onReceive(countdown) { _ in
+            guard isRunning else { return }
             if timeRemaining > 0 {
                 timeRemaining -= 1
             } else {
-                t.invalidate()
-                timer = nil
+                isRunning = false
                 vm.earnCoins(for: totalMinutes)
+                Suara.instance.focusDone()
                 DispatchQueue.main.asyncAfter(deadline: .now() + Timing.phaseChangeDelay) {
                     vm.phase = .breakSpinning
                 }
             }
         }
+        .gesture(HoldToExitBar.gesture(isHolding: $isHolding, holdProgress: $holdProgress, onExit: exit))
+        .onChange(of: isHolding) { _, newValue in
+            if newValue { Menggetar.instance.Getar(style: .medium) }
+        }
     }
 
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
+    private func exit() {
+        isRunning = false
+        vm.forfeitCoins(5)
+        Menggetar.instance.notifGetar(notif: .warning)
+        Suara.instance.forfeit()
+        vm.resetToSpin()
     }
 }
 
@@ -82,6 +70,3 @@ struct TimerView: View {
     TimerView(totalMinutes: 1)
         .environmentObject(AppViewModel.preview(coins: 8))
 }
-
-
-

@@ -5,9 +5,11 @@ struct BreakTimerView: View {
     @EnvironmentObject var vm: AppViewModel
 
     @State private var timeRemaining: Int
-    @State private var timer: Timer?
+    @State private var isRunning = true
     @State private var isHolding = false
     @State private var holdProgress: Double = 0
+
+    private let countdown = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     init(totalMinutes: Int) {
         self.totalMinutes = totalMinutes
@@ -26,33 +28,25 @@ struct BreakTimerView: View {
                     .padding(.bottom, 60)
             }
         }
-        .onAppear { startCountdown() }
-        .onDisappear { stopTimer() }
-        .gesture(HoldToExitBar.gesture(isHolding: $isHolding, holdProgress: $holdProgress, onExit: exit))
-    }
-
-    // MARK: - Actions
-
-    private func exit() {
-        stopTimer()
-        vm.resetToSpin()
-    }
-
-    private func startCountdown() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
+        .onReceive(countdown) { _ in
+            guard isRunning else { return }
             if timeRemaining > 0 {
-                timeRemaining -= 60
+                timeRemaining -= 1
             } else {
-                t.invalidate()
-                timer = nil
+                isRunning = false
+                Suara.instance.breakDone()
                 vm.resetToSpin()
             }
         }
+        .gesture(HoldToExitBar.gesture(isHolding: $isHolding, holdProgress: $holdProgress, onExit: exit))
     }
 
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
+    private func exit() {
+        isRunning = false
+        vm.forfeitCoins(5)
+        Menggetar.instance.notifGetar(notif: .warning)
+        Suara.instance.forfeit()
+        vm.resetToSpin()
     }
 }
 
