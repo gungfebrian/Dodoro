@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var vm: AppViewModel
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+    @State private var showOnboarding = false
 
     var body: some View {
         ZStack {
@@ -27,9 +29,26 @@ struct ContentView: View {
                 ShopView()
                     .transition(.opacity)
             }
+
+            if showOnboarding {
+                OnboardingView {
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        showOnboarding = false
+                        hasSeenOnboarding = true
+                    }
+                }
+                .transition(.opacity)
+                .zIndex(10)
+            }
         }
         .animation(.easeInOut(duration: 0.5), value: vm.phase)
         .animation(.easeInOut(duration: 0.3), value: vm.preferManualPick)
+        .animation(.easeInOut(duration: 0.5), value: showOnboarding)
+        .onAppear {
+            if !hasSeenOnboarding {
+                showOnboarding = true
+            }
+        }
     }
 }
 
