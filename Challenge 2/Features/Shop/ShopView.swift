@@ -6,9 +6,8 @@ struct ShopView: View {
 
     var body: some View {
         ZStack {
-            PaperBackground()
 
-            VStack(spacing: 24) {
+            VStack {
                 // Header
                 HStack {
                     Button {
@@ -30,16 +29,18 @@ struct ShopView: View {
                 .padding(.horizontal, 24)
 
                 // Items grid
-                HStack(spacing: 16) {
-                    ForEach(ShopItem.allItems) { item in
-                        itemCard(item)
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                        ForEach(ShopItem.allItems) { item in
+                            itemCard(item)
+                        }
                     }
-                }
-                .padding(.horizontal, 24)
-
-                Spacer()
+                } 
             }
             .padding(.top, 60)
+            .background {
+                PaperBackground()
+            }
 
             // Purchase feedback
             if let name = purchasedItemName {

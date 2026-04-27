@@ -41,7 +41,7 @@ struct BreakTimerView: View {
     private func startCountdown() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
             if timeRemaining > 0 {
-                timeRemaining -= 60
+                timeRemaining -= 30
             } else {
                 t.invalidate()
                 timer = nil

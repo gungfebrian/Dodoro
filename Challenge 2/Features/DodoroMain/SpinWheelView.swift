@@ -114,7 +114,7 @@ struct SpinWheelView: View {
                     .fill(Color.white.opacity(0.5))
                     .strokeBorder(AppColor.paperLo, lineWidth: 1)
             )
-        } .offset(x: -125,y: -55)
+        } .offset(x: 12,y: -55)
     }
 
     // MARK: - Logic

@@ -51,7 +51,7 @@ struct TimePickerView: View {
                             .foregroundStyle(ink)
                             .tag(m)
                     }
-                }
+                } 
                 .pickerStyle(.wheel)
                 .frame(height: 160)
                 .clipped()
@@ -195,12 +195,7 @@ struct TimePickerView: View {
     }
     
     private func formattedPickerRow(_ minutes: Int) -> String {
-        if minutes >= 60 {
-            let h = minutes / 60
-            let m = minutes % 60
-            return m > 0 ? "\(h)h \(m)m" : "\(h)h"
-        }
-        return "\(minutes) min"
+                return "\(minutes)"
     }
     
     // MARK: Reward hint

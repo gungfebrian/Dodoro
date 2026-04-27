@@ -16,8 +16,17 @@ struct ShopItem: Identifiable, Equatable {
     let imageName: String
 
     static let allItems: [ShopItem] = [
-        ShopItem(id: "dodit", name: "Dodit", price: 15, imageName: "Dodit"),
-        ShopItem(id: "scribi", name: "Scribi", price: 25, imageName: "Scribi"),
+        ShopItem(id: "DefaultPointer", name: "Default", price: 0, imageName: "Pointer"),
+        ShopItem(id: "Pointer", name: "Paper Clip", price: 15, imageName: "Pointer"),
+        ShopItem(id: "PointerPencil", name: "Pencil", price: 25, imageName: "PointerPencil"),
+        ShopItem(id: "PointerPin", name: "Pin", price: 25, imageName: "PointerPin"),
+        ShopItem(id: "PointerRuler", name: "Ruler", price: 35, imageName: "PointerRuler"),
+        ShopItem(id: "PointerCompass", name: "Compass", price: 50, imageName: "PointerCompass"),
+        ShopItem(id: "PointerScissors", name: "Scissors", price: 55, imageName: "PointerScissors"),
+        ShopItem(id: "scribi5", name: "Scribi2", price: 25, imageName: "Scribi"),
+        ShopItem(id: "scribi6", name: "Scribi2", price: 25, imageName: "Scribi"),
+        ShopItem(id: "scribi7", name: "Scribi2", price: 25, imageName: "Scribi"),
+
     ]
 }
 
